@@ -1,0 +1,1151 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KAVACHAM | Security Intelligence</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+:root {
+    --bg: #080d18;
+    --panel: #111a2b;
+    --border: #253249;
+    --text: #edf2fa;
+    --muted: #8492a9;
+    --blue: #68a5ff;
+    --red: #ff657c;
+    --green: #35d6a0;
+    --yellow: #ffc66d;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+}
+
+.layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 235px;
+    background: #0d1524;
+    border-right: 1px solid var(--border);
+    padding: 30px 20px;
+    flex-shrink: 0;
+}
+
+.logo {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 25px;
+    font-weight: 700;
+    color: var(--blue);
+    letter-spacing: 1px;
+}
+
+.logo-sub {
+    color: var(--muted);
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    margin-top: 7px;
+    margin-bottom: 45px;
+}
+
+.nav-label {
+    color: #63728a;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    margin: 25px 0 12px 10px;
+}
+
+.nav-item {
+    padding: 12px;
+    border-radius: 8px;
+    color: #aab7ca;
+    font-size: 13px;
+    margin-bottom: 6px;
+}
+
+.nav-item.active {
+    background: #192a44;
+    color: var(--blue);
+    border: 1px solid #29466d;
+}
+
+.sidebar-bottom {
+    margin-top: 70px;
+    padding: 14px;
+    background: #121f32;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.8;
+}
+
+.sidebar-bottom strong {
+    color: var(--green);
+}
+
+main {
+    flex: 1;
+    padding: 34px 40px;
+    min-width: 0;
+    max-width: 1600px;
+}
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 28px;
+}
+
+.eyebrow {
+    font-size: 11px;
+    color: var(--blue);
+    letter-spacing: 2px;
+    margin-bottom: 9px;
+    font-weight: 700;
+}
+
+h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 28px;
+}
+
+.subtitle {
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 7px;
+}
+
+.status {
+    background: #103b32;
+    border: 1px solid #1d7058;
+    color: var(--green);
+    border-radius: 30px;
+    padding: 9px 15px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.status::before {
+    content: "●";
+    margin-right: 8px;
+}
+
+.status.error {
+    color: var(--red);
+    background: #401e2a;
+    border-color: #793347;
+}
+
+.status.scanning {
+    color: var(--yellow);
+    background: #3d321d;
+    border-color: #74602c;
+}
+
+.panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    padding: 24px;
+    min-width: 0;
+}
+
+.section-heading {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 17px;
+    margin-bottom: 18px;
+}
+
+.panel-subtitle {
+    color: var(--muted);
+    font-size: 11px;
+    margin-top: -10px;
+    margin-bottom: 20px;
+}
+
+/* GitHub scanner */
+
+.scan-panel {
+    margin-bottom: 25px;
+    background: linear-gradient(120deg, #14243c, #111a2b);
+}
+
+.scan-input-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.search {
+    background: #0b1423;
+    border: 1px solid var(--border);
+    padding: 12px 14px;
+    border-radius: 8px;
+    color: white;
+    outline: none;
+    font-size: 12px;
+}
+
+.search:focus {
+    border-color: var(--blue);
+}
+
+.repo-input {
+    flex: 1;
+    min-width: 220px;
+}
+
+.scan-button {
+    background: #3478f6;
+    color: white;
+    border: 0;
+    border-radius: 8px;
+    padding: 12px 22px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 12px;
+    transition: .2s;
+}
+
+.scan-button:hover {
+    background: #5590ff;
+}
+
+.scan-button:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+}
+
+.scan-message {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 14px;
+    line-height: 1.6;
+}
+
+/* Metric cards */
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 17px;
+    margin-bottom: 25px;
+}
+
+.card {
+    background: linear-gradient(145deg, #16233a, #111a2b);
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    padding: 21px;
+    position: relative;
+    overflow: hidden;
+}
+
+.card-label {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.card-value {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 34px;
+    font-weight: 700;
+    margin: 13px 0 5px;
+}
+
+.card-note {
+    color: #718098;
+    font-size: 11px;
+}
+
+.blue { color: var(--blue); }
+.red { color: var(--red); }
+.green { color: var(--green); }
+.yellow { color: var(--yellow); }
+
+/* Charts */
+
+.grid-two {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-bottom: 23px;
+}
+
+.donut-area {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 35px;
+    min-height: 205px;
+}
+
+.donut {
+    width: 170px;
+    height: 170px;
+    border-radius: 50%;
+    position: relative;
+    flex-shrink: 0;
+    background: #263449;
+}
+
+.donut::after {
+    content: "";
+    position: absolute;
+    inset: 23px;
+    background: var(--panel);
+    border-radius: 50%;
+}
+
+.donut-center {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.donut-center strong {
+    font-size: 29px;
+    font-family: 'Space Grotesk', sans-serif;
+}
+
+.donut-center span {
+    color: var(--muted);
+    font-size: 10px;
+}
+
+.legend {
+    display: flex;
+    flex-direction: column;
+    gap: 17px;
+}
+
+.legend-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+}
+
+.dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 3px;
+}
+
+.legend-row strong {
+    margin-left: auto;
+    font-size: 14px;
+}
+
+.bar-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.bar-top {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    margin-bottom: 8px;
+}
+
+.bar-top span:last-child {
+    color: var(--red);
+}
+
+.bar-track {
+    height: 7px;
+    background: #27344a;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #e84e6b, #ff8c85);
+    border-radius: 20px;
+}
+
+/* Dependency table */
+
+.table-panel {
+    margin-bottom: 23px;
+}
+
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.table-search {
+    width: 210px;
+}
+
+.table-wrap {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+}
+
+th {
+    text-align: left;
+    color: #7889a2;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 14px 12px;
+    border-bottom: 1px solid var(--border);
+}
+
+td {
+    padding: 16px 12px;
+    border-bottom: 1px solid #202d41;
+    font-size: 12px;
+}
+
+tbody tr:hover {
+    background: #18243a;
+}
+
+.package-name {
+    font-weight: 700;
+    color: #e8effa;
+}
+
+.version {
+    color: #9baac0;
+    font-family: monospace;
+}
+
+.badge {
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.badge-danger {
+    color: #ff8b9c;
+    background: #401e2a;
+}
+
+.badge-safe {
+    color: #54e2b2;
+    background: #123c32;
+}
+
+/* Vulnerability findings */
+
+.details-panel {
+    margin-bottom: 25px;
+}
+
+.group {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.group:last-child {
+    border-bottom: none;
+}
+
+.group-title {
+    color: var(--blue);
+    font-size: 13px;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+.group-meta {
+    display: flex;
+    gap: 9px;
+    flex-wrap: wrap;
+    margin-top: 9px;
+}
+
+.group-meta span {
+    font-size: 10px;
+    color: #aab8cc;
+    background: #1b2940;
+    padding: 5px 9px;
+    border-radius: 5px;
+}
+
+.footer {
+    color: #64738b;
+    font-size: 11px;
+    text-align: center;
+    padding: 20px;
+}
+
+@media(max-width: 1000px) {
+    .sidebar { display: none; }
+    main { padding: 25px; }
+}
+
+@media(max-width: 750px) {
+    .cards { grid-template-columns: repeat(2, 1fr); }
+    .grid-two { grid-template-columns: 1fr; }
+    .donut-area { gap: 20px; }
+}
+
+@media(max-width: 480px) {
+    main { padding: 18px; }
+    .cards { grid-template-columns: 1fr 1fr; }
+    .card { padding: 15px; }
+    .card-value { font-size: 27px; }
+    .donut-area {
+        flex-direction: column;
+        padding: 15px;
+    }
+    .topbar { align-items: flex-start; }
+    h1 { font-size: 23px; }
+    .table-header { align-items: flex-start; flex-direction: column; }
+    .table-search { width: 100%; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="layout">
+
+<aside class="sidebar">
+    <div class="logo">KAVACHAM</div>
+    <div class="logo-sub">SECURITY INTELLIGENCE</div>
+
+    <div class="nav-label">WORKSPACE</div>
+    <div class="nav-item active">▦ &nbsp; Dashboard</div>
+    <div class="nav-item">⌕ &nbsp; Dependency Analysis</div>
+    <div class="nav-item">◈ &nbsp; Vulnerability Reports</div>
+
+    <div class="nav-label">SYSTEM</div>
+    <div class="nav-item">⚙ &nbsp; Scanner Overview</div>
+
+    <div class="sidebar-bottom">
+        SCANNING ENGINE<br>
+        <strong>● OSV API</strong><br>
+        Open Source Vulnerability Database
+    </div>
+</aside>
+
+<main>
+
+    <div class="topbar">
+        <div>
+            <div class="eyebrow">SECURITY OVERVIEW / 01</div>
+            <h1>Vulnerability Dashboard</h1>
+            <p class="subtitle">
+                Monitor and analyze your project's dependency security.
+            </p>
+        </div>
+        <div class="status" id="scanStatus">LOADING</div>
+    </div>
+
+    <!-- GITHUB REPOSITORY SCANNER -->
+
+    <section class="panel scan-panel">
+        <h2 class="section-heading">Scan a GitHub Repository</h2>
+        <p class="panel-subtitle">
+            Enter a public GitHub repository URL to analyze its dependencies.
+        </p>
+
+        <div class="scan-input-row">
+            <input
+                id="repoUrl"
+                type="url"
+                class="search repo-input"
+                placeholder="https://github.com/username/repository"
+            >
+
+            <button
+                id="scanButton"
+                class="scan-button"
+                onclick="startScan()"
+            >
+                Scan Repository →
+            </button>
+        </div>
+
+        <p id="scanMessage" class="scan-message">
+            Supports public GitHub repositories.
+        </p>
+    </section>
+
+    <div class="cards">
+
+        <div class="card">
+            <div class="card-label">Total Dependencies</div>
+            <div class="card-value blue" id="total">—</div>
+            <div class="card-note">Packages detected</div>
+        </div>
+
+        <div class="card">
+            <div class="card-label">Vulnerable Packages</div>
+            <div class="card-value red" id="vulnerable">—</div>
+            <div class="card-note">Require attention</div>
+        </div>
+
+        <div class="card">
+            <div class="card-label">Secure Packages</div>
+            <div class="card-value green" id="safe">—</div>
+            <div class="card-note">No known vulnerabilities found</div>
+        </div>
+
+        <div class="card">
+            <div class="card-label">Vulnerability Groups</div>
+            <div class="card-value yellow" id="groups">—</div>
+            <div class="card-note">Grouped advisory findings</div>
+        </div>
+
+    </div>
+
+    <div class="grid-two">
+
+        <section class="panel">
+            <h2 class="section-heading">Security Distribution</h2>
+            <p class="panel-subtitle">
+                Vulnerable versus safe dependencies
+            </p>
+
+            <div class="donut-area">
+
+                <div class="donut" id="donut">
+                    <div class="donut-center">
+                        <strong id="riskPercent">—</strong>
+                        <span>AT RISK</span>
+                    </div>
+                </div>
+
+                <div class="legend">
+                    <div class="legend-row">
+                        <span class="dot" style="background:#ff657c"></span>
+                        Vulnerable
+                        <strong id="legendVulnerable">—</strong>
+                    </div>
+
+                    <div class="legend-row">
+                        <span class="dot" style="background:#35d6a0"></span>
+                        Safe
+                        <strong id="legendSafe">—</strong>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="panel">
+            <h2 class="section-heading">Package Risk Analysis</h2>
+            <p class="panel-subtitle">
+                Vulnerability groups by dependency
+            </p>
+            <div class="bar-list" id="riskBars"></div>
+        </section>
+
+    </div>
+
+    <section class="panel table-panel">
+
+        <div class="table-header">
+            <h2 class="section-heading" style="margin:0">
+                Dependency Inventory
+            </h2>
+
+            <input
+                class="search table-search"
+                id="searchInput"
+                placeholder="Search packages..."
+                oninput="filterPackages()"
+            >
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Package</th>
+                        <th>Version</th>
+                        <th>Ecosystem</th>
+                        <th>Vulnerability Groups</th>
+                        <th>Security Status</th>
+                    </tr>
+                </thead>
+
+                <tbody id="dependencyTable"></tbody>
+            </table>
+        </div>
+
+    </section>
+
+    <section class="panel details-panel">
+        <h2 class="section-heading">Vulnerability Intelligence</h2>
+        <p class="panel-subtitle">
+            Grouped advisory findings returned by the OSV scanner
+        </p>
+
+        <div id="vulnerabilityList"></div>
+    </section>
+
+    <div class="footer">
+        KAVACHAM · Dependency Vulnerability Scanner · Powered by OSV
+    </div>
+
+</main>
+</div>
+
+<script>
+
+let allDependencies = [];
+
+// LOAD EXISTING REPORT
+
+async function loadDashboard() {
+
+    const message = document.getElementById("scanMessage");
+
+    try {
+
+        const response = await fetch("/api/report");
+
+        if (!response.ok) {
+            throw new Error("Unable to load scan report.");
+        }
+
+        const report = await response.json();
+        const summary = report.summary;
+
+        allDependencies = report.dependencies || [];
+
+        document.getElementById("scanStatus").textContent =
+            report.scan_status || "UNKNOWN";
+
+        document.getElementById("scanStatus").className =
+            "status";
+
+        document.getElementById("total").textContent =
+            summary.total_dependencies ?? 0;
+
+        document.getElementById("vulnerable").textContent =
+            summary.vulnerable_dependencies ?? 0;
+
+        document.getElementById("safe").textContent =
+            summary.safe_dependencies ?? 0;
+
+        document.getElementById("groups").textContent =
+            summary.total_vulnerability_groups ?? 0;
+
+        const total = summary.total_dependencies || 0;
+        const vulnerable = summary.vulnerable_dependencies || 0;
+        const safe = summary.safe_dependencies || 0;
+
+        const percentage = total
+            ? Math.round((vulnerable / total) * 100)
+            : 0;
+
+        document.getElementById("riskPercent").textContent =
+            percentage + "%";
+
+        document.getElementById("legendVulnerable").textContent =
+            vulnerable;
+
+        document.getElementById("legendSafe").textContent =
+            safe;
+
+        const vulnerableAngle = total
+            ? (vulnerable / total) * 360
+            : 0;
+
+        document.getElementById("donut").style.background =
+            `conic-gradient(
+                #ff657c 0deg ${vulnerableAngle}deg,
+                #35d6a0 ${vulnerableAngle}deg 360deg
+            )`;
+
+        renderBars(allDependencies);
+        renderTable(allDependencies);
+        renderVulnerabilities(allDependencies);
+
+        if (message.textContent === "Loading scan report...") {
+            message.textContent = "Ready to scan a repository.";
+        }
+
+    } catch (error) {
+
+        document.getElementById("scanStatus").textContent = "ERROR";
+        document.getElementById("scanStatus").className = "status error";
+        message.textContent = error.message;
+
+    }
+}
+
+
+// START A NEW GITHUB SCAN
+
+async function startScan() {
+
+    const input = document.getElementById("repoUrl");
+    const button = document.getElementById("scanButton");
+    const message = document.getElementById("scanMessage");
+
+    const repoUrl = input.value.trim();
+
+    if (!repoUrl) {
+        message.textContent = "Please enter a GitHub repository URL.";
+        message.style.color = "#ff657c";
+        return;
+    }
+
+    const validGitHubUrl =
+        /^https:\/\/github\.com\/[^/]+\/[^/]+\/?(?:\.git)?$/i;
+
+    if (!validGitHubUrl.test(repoUrl)) {
+        message.textContent =
+            "Please enter a valid public GitHub repository URL.";
+        message.style.color = "#ff657c";
+        return;
+    }
+
+    button.disabled = true;
+    button.textContent = "Scanning...";
+
+    message.textContent =
+        "Cloning repository and analyzing dependencies. Please wait...";
+
+    message.style.color = "#68a5ff";
+
+    document.getElementById("scanStatus").textContent = "SCANNING";
+    document.getElementById("scanStatus").className = "status scanning";
+
+    try {
+
+        const response = await fetch("/api/scan", {
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+                repo_url: repoUrl
+            })
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                result.error || "Repository scan failed."
+            );
+        }
+
+        // Update dashboard from the newly returned report
+
+        updateDashboard(result);
+
+        message.textContent =
+            "✓ Repository scanned successfully!";
+
+        message.style.color = "#35d6a0";
+
+        document.getElementById("scanStatus").textContent =
+            result.scan_status || "COMPLETED";
+
+        document.getElementById("scanStatus").className = "status";
+
+    } catch (error) {
+
+        message.textContent = "✕ " + error.message;
+        message.style.color = "#ff657c";
+
+        document.getElementById("scanStatus").textContent = "ERROR";
+        document.getElementById("scanStatus").className = "status error";
+
+    } finally {
+
+        button.disabled = false;
+        button.textContent = "Scan Repository →";
+
+    }
+}
+
+
+// UPDATE DASHBOARD WITH NEW SCAN RESULTS
+
+function updateDashboard(report) {
+
+    const summary = report.summary;
+
+    allDependencies = report.dependencies || [];
+
+    document.getElementById("total").textContent =
+        summary.total_dependencies ?? 0;
+
+    document.getElementById("vulnerable").textContent =
+        summary.vulnerable_dependencies ?? 0;
+
+    document.getElementById("safe").textContent =
+        summary.safe_dependencies ?? 0;
+
+    document.getElementById("groups").textContent =
+        summary.total_vulnerability_groups ?? 0;
+
+    const total = summary.total_dependencies || 0;
+    const vulnerable = summary.vulnerable_dependencies || 0;
+    const safe = summary.safe_dependencies || 0;
+
+    const percentage = total
+        ? Math.round((vulnerable / total) * 100)
+        : 0;
+
+    document.getElementById("riskPercent").textContent =
+        percentage + "%";
+
+    document.getElementById("legendVulnerable").textContent =
+        vulnerable;
+
+    document.getElementById("legendSafe").textContent =
+        safe;
+
+    const angle = total ? (vulnerable / total) * 360 : 0;
+
+    document.getElementById("donut").style.background =
+        `conic-gradient(
+            #ff657c 0deg ${angle}deg,
+            #35d6a0 ${angle}deg 360deg
+        )`;
+
+    renderBars(allDependencies);
+    renderTable(allDependencies);
+    renderVulnerabilities(allDependencies);
+
+}
+
+
+// PACKAGE RISK BARS
+
+function renderBars(dependencies) {
+
+    const container = document.getElementById("riskBars");
+    container.replaceChildren();
+
+    const vulnerable = dependencies
+        .filter(dep => dep.vulnerable)
+        .sort((a, b) =>
+            (b.vulnerability_group_count || 0) -
+            (a.vulnerability_group_count || 0)
+        );
+
+    const maximum = Math.max(
+        1,
+        ...vulnerable.map(
+            dep => dep.vulnerability_group_count || 0
+        )
+    );
+
+    vulnerable.slice(0, 5).forEach(dep => {
+
+        const count = dep.vulnerability_group_count || 0;
+
+        const item = document.createElement("div");
+
+        const top = document.createElement("div");
+        top.className = "bar-top";
+
+        const name = document.createElement("span");
+        name.textContent = dep.name;
+
+        const value = document.createElement("span");
+        value.textContent = count + " groups";
+
+        top.append(name, value);
+
+        const track = document.createElement("div");
+        track.className = "bar-track";
+
+        const fill = document.createElement("div");
+        fill.className = "bar-fill";
+        fill.style.width = (count / maximum * 100) + "%";
+
+        track.appendChild(fill);
+        item.append(top, track);
+
+        container.appendChild(item);
+
+    });
+
+    if (!vulnerable.length) {
+        container.textContent =
+            "No vulnerable dependencies found.";
+    }
+
+}
+
+
+// DEPENDENCY TABLE
+
+function renderTable(dependencies) {
+
+    const table = document.getElementById("dependencyTable");
+    table.replaceChildren();
+
+    dependencies.forEach(dep => {
+
+        const row = document.createElement("tr");
+
+        const values = [
+            dep.name,
+            dep.version,
+            dep.ecosystem,
+            dep.vulnerability_group_count ?? 0
+        ];
+
+        values.forEach((value, index) => {
+
+            const cell = document.createElement("td");
+            cell.textContent = value ?? "—";
+
+            if (index === 0) {
+                cell.className = "package-name";
+            }
+
+            if (index === 1) {
+                cell.className = "version";
+            }
+
+            row.appendChild(cell);
+
+        });
+
+        const statusCell = document.createElement("td");
+        const badge = document.createElement("span");
+
+        badge.className = "badge " +
+            (dep.vulnerable ? "badge-danger" : "badge-safe");
+
+        badge.textContent =
+            dep.vulnerable ? "VULNERABLE" : "SAFE";
+
+        statusCell.appendChild(badge);
+        row.appendChild(statusCell);
+
+        table.appendChild(row);
+
+    });
+
+}
+
+
+// SEARCH PACKAGES
+
+function filterPackages() {
+
+    const query = document
+        .getElementById("searchInput")
+        .value.toLowerCase();
+
+    const filtered = allDependencies.filter(dep =>
+        (dep.name || "").toLowerCase().includes(query)
+    );
+
+    renderTable(filtered);
+
+}
+
+
+// VULNERABILITY DETAILS
+
+function renderVulnerabilities(dependencies) {
+
+    const container =
+        document.getElementById("vulnerabilityList");
+
+    container.replaceChildren();
+
+    let count = 0;
+
+    dependencies.forEach(dep => {
+
+        (dep.vulnerability_groups || []).forEach(group => {
+
+            count++;
+
+            const item = document.createElement("div");
+            item.className = "group";
+
+            const title = document.createElement("div");
+            title.className = "group-title";
+
+            title.textContent =
+                dep.name + " · " +
+                (group.canonical_id || "Advisory group");
+
+            const metadata = document.createElement("div");
+            metadata.className = "group-meta";
+
+            [
+                "Version: " + dep.version,
+                "Match: " + (group.match_type || "Unknown"),
+                "Advisories: " + (group.advisory_count ?? 0)
+            ].forEach(value => {
+
+                const tag = document.createElement("span");
+                tag.textContent = value;
+
+                metadata.appendChild(tag);
+
+            });
+
+            item.append(title, metadata);
+            container.appendChild(item);
+
+        });
+
+    });
+
+    if (!count) {
+        container.textContent =
+            "No vulnerability groups to display.";
+    }
+
+}
+
+
+// INITIAL LOAD
+
+loadDashboard();
+
+</script>
+
+</body>
+</html>
